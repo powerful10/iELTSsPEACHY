@@ -1,0 +1,6 @@
+{
+  "name": "IELTS Speaking AI Coach",
+  "description": "Voice-first AI tutor for IELTS Speaking that assesses responses against official criteria, diagnoses the primary bottleneck, teaches micro-lessons, and guides targeted retries.",
+  "requestFramePermissions": ["microphone"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
