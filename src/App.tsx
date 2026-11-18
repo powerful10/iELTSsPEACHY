@@ -365,7 +365,7 @@ export default function App() {
     }
   };
 
-  // Generate dynamic fresh question using Gemini API
+  // Generate dynamic fresh question using Gemini API with local SAMPLE_PROMPTS fallback
   const handleGenerateFreshQuestion = async () => {
     setIsGeneratingQuestion(true);
     try {
@@ -382,11 +382,23 @@ export default function App() {
         const newPrompt: SpeakingPrompt = await res.json();
         setCurrentPrompt(newPrompt);
         resetSessionToNewQuestion();
+        return;
       }
-    } catch (err) {
-      console.warn('Failed to generate dynamic question:', err);
+    } catch {
+      // Fallback to built-in prompt bank below
     } finally {
       setIsGeneratingQuestion(false);
+    }
+
+    const pool = SAMPLE_PROMPTS.filter((p) => p.part === currentPart);
+    const candidates = pool.filter((p) => p.id !== currentPrompt.id);
+    const pick =
+      candidates.length > 0
+        ? candidates[Math.floor(Math.random() * candidates.length)]
+        : pool[0] || SAMPLE_PROMPTS[0];
+    if (pick) {
+      setCurrentPrompt(pick);
+      resetSessionToNewQuestion();
     }
   };
 
